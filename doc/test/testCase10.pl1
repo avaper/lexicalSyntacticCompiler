@@ -1,0 +1,52 @@
+programa diez:
+	
+	subprogramas
+	
+		funcion test (): booleano:
+		
+			variables c : entero;
+
+			subprogramas
+			
+				funcion test3 (a,b: entero): entero:
+				
+					variables c : entero;
+				
+				comienzo
+				
+					devolver c;
+
+				fin;
+		comienzo
+			
+			devolver c;
+
+		fin;
+
+		funcion test3 (a,b: entero): entero:
+		
+			variables c : entero;
+		
+		comienzo
+			
+			devolver c;
+
+		fin;
+			
+		procedimiento test3 ():
+
+			variables
+				e :		   entero;
+				f :		   booleano;
+				x, z ,w :  entero; 
+				abierto :  booleano; 
+				v1, v2 :   TipoVector;  
+				v : 	   TipoVectorEnteros; 
+				b : 	   TipoVectorBooleanos;
+		
+		comienzo
+
+		fin;			
+	
+comienzo
+fin.

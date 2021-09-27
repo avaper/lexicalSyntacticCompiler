@@ -1,0 +1,35 @@
+programa once:
+	
+	subprogramas
+
+		funcion test3 (a,b: booleano): entero:
+		
+			variables c : entero;
+		
+		comienzo
+			
+			devolver c;
+
+		fin;
+		
+		funcion test3 (a,b: booleano; c: entero; var a,b: booleano; var c: entero): entero:
+		
+			variables c : entero;
+		
+		comienzo
+			
+			devolver c;
+
+		fin;
+			
+		procedimiento test3 (a,b: booleano; c: entero; var a,b: booleano; var c: entero):
+
+			variables
+				e :		   entero;
+		
+		comienzo
+
+		fin;			
+	
+comienzo
+fin.

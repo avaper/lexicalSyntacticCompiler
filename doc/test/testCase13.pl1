@@ -1,0 +1,35 @@
+programa trece:
+	
+comienzo
+
+	a = 5;
+	v[1] = 3;
+	#NO PUEDE LLEVAR PARENTESIS VACIOS
+	#b = a + 2 * 3 + (2) * (3 + 5) + [()+(3+5)*(v)];
+	
+	#NO PUEDE LLEVAR CORCHETES VACIOS
+	#b = a + 2 * 3 + (2) * (3 + 5) + [[]+(3+5)*(v)];
+	
+	b = a + 2 * 3 + (2) * (3 + 5) + [(3+5)+(v)];
+	
+	c = a < b;
+	d = c == c + 0;
+	
+	e = a[1] + b[2];
+	
+	b[3] = cierto;
+	
+	c[5] = v[3] < 3 + 3;
+	
+	aasd = no (a == b) y falso;
+	
+	b = llamadaafuncion();
+	c = llamadaafuncion(a+b);
+	
+	c = llamadaafuncion(a+b, 5, cierto, v[3]);
+	
+	#si a < b:
+	
+	#fin si;
+
+fin.

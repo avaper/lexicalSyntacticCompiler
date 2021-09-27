@@ -1,0 +1,349 @@
+package compiler.syntax;
+
+// Declaración de importaciones 
+//(No modificar las proporcionadas. Se pueden agregar mas)
+
+import java_cup.runtime.Symbol;
+import java.util.*;
+
+import es.uned.lsi.compiler.lexical.*;
+import es.uned.lsi.compiler.code.*;
+import es.uned.lsi.compiler.intermediate.*;
+import es.uned.lsi.compiler.semantic.*;
+import es.uned.lsi.compiler.semantic.symbol.*;
+import es.uned.lsi.compiler.semantic.type.*;
+import es.uned.lsi.compiler.syntax.*;
+
+import compiler.CompilerContext;
+import compiler.lexical.*;
+import compiler.syntax.nonTerminal.*;
+import compiler.semantic.*;
+import compiler.semantic.symbol.*;
+import compiler.semantic.type.*;
+import compiler.intermediate.*;
+import compiler.code.*;
+
+// Declaración del código de usuario
+
+action code {:
+	
+	SyntaxErrorManager   syntaxErrorManager   = CompilerContext.getSyntaxErrorManager();
+	SemanticErrorManager semanticErrorManager = CompilerContext.getSemanticErrorManager ();
+	ScopeManagerIF       scopeManager         = CompilerContext.getScopeManager ();
+	FinalCodeFactoryIF   finalCodeFactory     = CompilerContext.getFinalCodeFactory ();
+
+:}	
+
+parser code {:
+
+	SyntaxErrorManager syntaxErrorManager = CompilerContext.getSyntaxErrorManager();
+	
+	public void syntax_error(Symbol symbol)
+	{ 
+	    Token token = (Token) symbol.value;
+	    syntaxErrorManager.syntaxError ("Error sintactico", token);	    
+	}
+		
+	public void unrecovered_syntax_error(java_cup.runtime.Symbol symbol)
+	{	
+	    Token token = (Token) symbol.value;
+	    syntaxErrorManager.syntaxFatalError ("Error fatal", token);
+	}
+:}
+
+// Declaración de terminales (Ejemplo)
+
+	// Palabras reservadas
+	
+	terminal Token BOOLEANO;
+	terminal Token CIERTO;
+	terminal Token COMIENZO;
+	terminal Token CONSTANTES;
+	terminal Token DE;
+	terminal Token EN;
+	terminal Token DEVOLVER;
+	terminal Token ENTERO;
+	terminal Token ENTONCES;
+	terminal Token ESCRIBIR;
+	terminal Token FALSO;
+	terminal Token FIN;
+	terminal Token FUNCION;
+	terminal Token NO;
+	terminal Token PARA;
+	terminal Token PROCEDIMIENTO;
+	terminal Token PROGRAMA;
+	terminal Token SI;
+	terminal Token SINO;
+	terminal Token SUBPROGRAMAS;
+	terminal Token TIPOS;
+	terminal Token VAR;
+	terminal Token VARIABLES;
+	terminal Token VECTOR;
+	terminal Token Y;
+
+	// Delimitadores
+	
+	terminal Token PARIZQ;
+	terminal Token PARDER; 
+	terminal Token CORIZQ; 
+	terminal Token CORDER; 
+	terminal Token PUNTO; 
+	terminal Token COMA; 
+	terminal Token PUNTOYCOMA; 
+	terminal Token DOSPUNTOS; 
+	terminal Token RANGO;
+	
+	// Operadores aritméticos
+	
+	terminal Token SUMA; 
+	terminal Token PRODUCTO;
+
+	// Operadores relacionales
+	
+	terminal Token MENOR;
+	terminal Token IGUAL;
+	
+	// Operador de asignación
+	
+	terminal Token ASIGNACION;
+
+	// Patrones
+	
+ 	terminal Token NUMERO;
+	terminal Token IDENTIFICADOR;
+	terminal Token CADENA;
+
+// ...
+
+// Declaración de no terminales
+
+// no modificar los propuestos
+
+	non terminal  			program;
+	non terminal Axiom		axiom;
+
+	non terminal epsilon;
+	
+	non terminal opcionales;
+	
+	non terminal seccionConstantes;
+	non terminal declaracionConstantes;
+	non terminal tiposConstante;
+	
+	non terminal seccionTipos;
+	non terminal declaracionTipos;
+	non terminal tiposPrimitivos;
+	non terminal tiposCompuestos;
+	
+	non terminal seccionVariables;
+	non terminal declaracionVariables;
+	non terminal listaIdentificadores;
+	non terminal tiposVariables;
+	
+	non terminal seccionSubprogramas;
+	non terminal declaracionSubprogramas;
+	non terminal declaracionProcedimiento;
+	non terminal declaracionFuncion;
+	non terminal parametros;
+	non terminal listaParametros;
+	non terminal retorno;
+
+	non terminal expresion;
+	non terminal listaExpresiones;
+		
+	non terminal sentencia;
+	non terminal listaSentencias;
+	
+	non terminal sentenciaAsignacion;
+	non terminal sentenciaSi;
+	non terminal sentenciaPara;
+	non terminal sentenciaSalida;
+	non terminal sentenciaLlamada;
+
+// ...
+
+// Declaración de relaciones de precedencia
+
+	precedence right	ASIGNACION;
+	precedence left		NO, Y;
+	precedence left     PARIZQ, PARDER;
+	precedence left		CORIZQ, CORDER;
+	precedence right	MENOR, IGUAL;
+	precedence left     PRODUCTO, SUMA;
+
+// ...
+
+// Declaración de reglas de producción
+
+start with program;
+
+program ::= 
+  {: 
+        syntaxErrorManager.syntaxInfo ("Starting parsing..."); 
+   :}
+  axiom:ax
+  {: 
+  		// No modificar esta estructura, aunque se pueden añadir más acciones semánticas
+  		// Para la entrega de febrero pueden comentarse las dos sentencias siguientes:
+  		//List intermediateCode = ax.getIntermediateCode ();
+  		//finalCodeFactory.create (intermediateCode);
+  		// En caso de no comentarse las sentencias anteriores puede generar una excepcion
+  		// en las llamadas a cupTest en la entrega de Febrero. Esto es debido a que 
+  		// aún no se tendrá implementada la generación de código intermedio ni final.
+  		// Para la entrega de Junio deberán descomentarse y usarse.
+  		
+  		syntaxErrorManager.syntaxInfo ("Parsing process ended.");
+   :};
+
+axiom ::= 					PROGRAMA IDENTIFICADOR DOSPUNTOS opcionales COMIENZO listaSentencias FIN PUNTO ;
+
+epsilon ::= ;
+
+opcionales::= 				seccionConstantes seccionTipos seccionVariables seccionSubprogramas |
+
+						  	seccionConstantes seccionTipos seccionVariables |
+						  	seccionConstantes seccionTipos seccionSubprogramas |
+						  	seccionConstantes seccionVariables seccionSubprogramas |
+						  	seccionTipos seccionVariables seccionSubprogramas |
+						  
+						  	seccionConstantes seccionTipos |
+						  	seccionConstantes seccionVariables |
+						  	seccionConstantes seccionSubprogramas |
+						  	seccionTipos seccionVariables |
+						  	seccionTipos seccionSubprogramas |
+						  	seccionVariables seccionSubprogramas |
+						  
+						  	seccionConstantes |
+						  	seccionTipos |
+						  	seccionVariables |
+						  	seccionSubprogramas |
+						  	epsilon ;
+
+
+
+// ----------------------------------------------------------------------------
+//  CONSTANTES
+// ----------------------------------------------------------------------------
+
+seccionConstantes::= 		CONSTANTES declaracionConstantes ;
+
+declaracionConstantes::= 	IDENTIFICADOR ASIGNACION tiposConstante PUNTOYCOMA declaracionConstantes |
+							IDENTIFICADOR ASIGNACION tiposConstante PUNTOYCOMA ;
+
+tiposConstante::= 			NUMERO | CIERTO | FALSO ;
+
+
+
+// ----------------------------------------------------------------------------
+//  TIPOS
+// ----------------------------------------------------------------------------
+
+seccionTipos::= 			TIPOS declaracionTipos ;
+
+declaracionTipos::= 		IDENTIFICADOR ASIGNACION tiposCompuestos PUNTOYCOMA declaracionTipos |
+							IDENTIFICADOR ASIGNACION tiposCompuestos PUNTOYCOMA ;
+
+tiposPrimitivos::= 			ENTERO | BOOLEANO ;
+
+tiposCompuestos::= 			VECTOR CORIZQ NUMERO RANGO NUMERO CORDER DE tiposPrimitivos ;
+
+
+
+// ----------------------------------------------------------------------------
+//  VARIABLES
+// ----------------------------------------------------------------------------
+
+seccionVariables::= 		VARIABLES declaracionVariables ;
+
+declaracionVariables::= 	listaIdentificadores DOSPUNTOS tiposVariables PUNTOYCOMA declaracionVariables |
+							listaIdentificadores DOSPUNTOS tiposVariables PUNTOYCOMA ;
+
+listaIdentificadores::= 	IDENTIFICADOR listaIdentificadores | 
+							COMA listaIdentificadores | 
+							epsilon ;
+
+tiposVariables::= 			tiposPrimitivos | IDENTIFICADOR ;
+
+
+
+// ----------------------------------------------------------------------------
+//  SUBPROGRAMAS
+// ----------------------------------------------------------------------------
+
+seccionSubprogramas::= 		SUBPROGRAMAS declaracionSubprogramas ;
+
+declaracionSubprogramas::=	declaracionProcedimiento declaracionSubprogramas |
+							declaracionFuncion declaracionSubprogramas |
+							declaracionProcedimiento |
+							declaracionFuncion ;
+
+declaracionProcedimiento::= PROCEDIMIENTO IDENTIFICADOR PARIZQ listaParametros PARDER DOSPUNTOS opcionales COMIENZO listaSentencias FIN PUNTOYCOMA ;
+
+declaracionFuncion::= 		FUNCION IDENTIFICADOR PARIZQ listaParametros PARDER DOSPUNTOS tiposPrimitivos DOSPUNTOS opcionales COMIENZO listaSentencias FIN PUNTOYCOMA ;
+
+parametros::= 				VAR listaIdentificadores DOSPUNTOS tiposVariables | 
+							listaIdentificadores DOSPUNTOS tiposPrimitivos ;
+
+listaParametros::= 			parametros listaParametros | 
+							PUNTOYCOMA parametros listaParametros | 
+							epsilon ;
+
+
+
+// ----------------------------------------------------------------------------
+//  EXPRESIONES
+// ----------------------------------------------------------------------------
+
+expresion::=				IDENTIFICADOR | 
+							NUMERO | 
+							CIERTO | 
+							FALSO | 
+							expresion SUMA expresion | 
+							expresion PRODUCTO expresion |
+							expresion Y expresion |
+							NO expresion |
+							expresion MENOR expresion | 
+							expresion IGUAL expresion |
+							CORIZQ expresion CORDER | 
+							PARIZQ expresion PARDER |
+							IDENTIFICADOR CORIZQ expresion CORDER |
+							IDENTIFICADOR PARIZQ listaExpresiones PARDER ;
+
+
+listaExpresiones::= 		expresion listaExpresiones | 
+							COMA expresion listaExpresiones | 
+							epsilon ;
+
+
+
+// ----------------------------------------------------------------------------
+//  SENTENCIAS
+// ----------------------------------------------------------------------------
+
+sentencia::=				expresion |
+							retorno | 
+							sentenciaAsignacion | 
+							sentenciaSi | 
+							sentenciaPara | 
+							sentenciaSalida |
+							sentenciaLlamada ;
+
+listaSentencias::= 			sentencia listaSentencias | 
+							epsilon ;
+							
+retorno::= 					DEVOLVER expresion PUNTOYCOMA ;
+
+sentenciaAsignacion::=		IDENTIFICADOR ASIGNACION expresion PUNTOYCOMA | 
+							IDENTIFICADOR CORIZQ NUMERO CORDER ASIGNACION expresion PUNTOYCOMA ;
+
+sentenciaSi::=				SI expresion ENTONCES DOSPUNTOS listaSentencias FIN SI PUNTOYCOMA |
+							SI expresion ENTONCES DOSPUNTOS listaSentencias SINO DOSPUNTOS listaSentencias FIN SI PUNTOYCOMA ;
+
+sentenciaPara::=			PARA expresion EN expresion RANGO expresion DOSPUNTOS listaSentencias FIN PARA PUNTOYCOMA ;
+
+sentenciaSalida::=			ESCRIBIR PARIZQ IDENTIFICADOR PARDER PUNTOYCOMA |
+							ESCRIBIR PARIZQ expresion PARDER PUNTOYCOMA |
+							ESCRIBIR PARIZQ CADENA PARDER PUNTOYCOMA |
+							ESCRIBIR PARIZQ PARDER PUNTOYCOMA ;
+							
+sentenciaLlamada::=			IDENTIFICADOR PARIZQ listaExpresiones PARDER PUNTOYCOMA ;

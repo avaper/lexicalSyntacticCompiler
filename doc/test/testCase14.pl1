@@ -1,0 +1,50 @@
+PrOgRaMa catorce:
+
+	subprogramas
+	
+		FUNCION test (a, b : entero): ENTERO:
+		
+			variables 
+			
+				suma: entero;
+			
+		comienzo
+		
+			suma = a + b;
+			
+			SI (suma < 2) ENTONCES:
+				
+				SI suma == 2 ENTONCES:
+					
+					DEVOLVER (a + b);
+					
+				SINO:
+				
+					DEVOLVER 2 * b;
+				
+				FIN SI;
+			
+			SINO:
+				
+				DEVOLVER FALSO;
+					
+			FIN SI;
+			
+		fin;
+		
+CoMiEnZo
+
+	a1 = 5;
+	a22 = 2;
+	_a022 = 50;
+	as = 25;
+	b = 1;
+	c = 0;
+	
+	d = sumar(a1, 3);
+	sumar(a);
+	sumar();
+	sumar(a, b);
+	sumar(2+3, b);
+
+fin.

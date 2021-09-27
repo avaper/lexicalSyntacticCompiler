@@ -1,0 +1,44 @@
+programa doce:
+	
+	subprogramas
+
+		funcion test3 (): entero:
+		
+			variables c : entero;
+		
+		comienzo
+		
+			c = 2;
+			
+			si a+b entonces:
+				
+				escribir(a+b);
+			
+			sino:
+			
+				escribir();
+			
+			fin si;
+			
+			si (a) entonces:
+			
+				escribir(a);
+			
+			fin si;
+			
+			para a en 1..9: 
+			
+				escribir(23);
+			
+			fin para;
+			
+			escribir();			
+			
+			devolver c;
+
+		fin;
+	
+comienzo
+
+
+fin.

@@ -1,0 +1,50 @@
+
+programa nueve:
+	
+	# NO PUEDE IR VACIO
+	# OPCIONAL
+	# UNICO
+	
+	constantes
+		a = 10;
+		b = cierto;
+		i = falso;
+	
+	# NO PUEDE IR VACIO
+	# OPCIONAL
+	# UNICO
+	# SE COME ENTEROS EN LUGAR DE NATURALES
+	
+	tipos
+		TipoEntero   = vector [1..3] de entero;
+		TipoBooleano = vector [0..4] de booleano;
+		
+	# NO PUEDE IR VACIO
+	# OPCIONAL
+	# UNICO
+	
+	variables
+		e :		   entero;
+		f :		   booleano;
+		x, z ,w :  entero; 
+		abierto :  booleano; 
+		v1, v2 :   TipoVector;  
+		v : 	   TipoVectorEnteros; 
+		b : 	   TipoVectorBooleanos;
+		
+	# NO PUEDE IR VACIO
+	# OPCIONAL
+	# UNICO
+	
+	subprogramas
+	
+		funcion sumar (a,b : entero): entero:
+			variables suma: entero;
+		comienzo
+			suma = a + b;
+
+			devolver suma;
+		fin;
+comienzo
+
+fin.
